@@ -4,29 +4,31 @@
         <div class="computer">
             <el-button @click="output(num)" v-for="num in nums" >{{num}}</el-button>
         </div>
-      <el-button @click="now++"></el-button>
+      <el-input v-model="current"></el-input>
+      <el-button @click="computeResult">=</el-button>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'HelloWorld',
+        name: 'computer',
         data() {
             return {
                 nums: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
                 current: '',
-                now:0
+                result: ''
             };
         },
         methods: {
           output(num) {
             this.result += num;
             },
+          computeResult(){
+              this.result = this.current;
+          }
         },
       computed:{
-          result:function() {
-            return this.now*50;
-          }
+
       }
     };
 </script>
