@@ -1,17 +1,13 @@
 <template>
   <div id="app">
-    <Computer msg="Welcome to Your Vue.js App"/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Computer from './components/computer.vue'
 
 export default {
   name: 'app',
-  components: {
-    Computer
-  }
 }
 </script>
 
