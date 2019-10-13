@@ -1,32 +1,34 @@
 <template>
-  <div class="hello">
-    <el-button>测试按钮</el-button>
-  </div>
+    <div style="width: 21em;margin:0 auto">
+        <el-card>{{result}}</el-card>
+        <div class="computer">
+            <el-button @click="output(num)" v-for="num in nums" >{{num}}</el-button>
+        </div>
+    </div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+    export default {
+        name: 'HelloWorld',
+        data() {
+            return {
+                nums: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
+                result: ''
+            };
+        },
+        methods: {
+          output(num) {
+            this.result += num;
+            },
+        }
+    };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+    .computer {
+        width: 10em;
+        height: 20em;
+      margin: 0 auto;
+    }
 </style>
