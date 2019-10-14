@@ -303,7 +303,6 @@
             },
             isNumber() {
                 let reg = /^[0-9][0-9]*$/;
-                console.log(String(this.current).split(/[×÷+-]/).slice(-1)[0]);
                 return reg.test(String(this.current).split(/[()×÷+-]/).slice(-1)[0]);
             }
         },
