@@ -231,7 +231,7 @@
                 return reg.test(String(this.current).slice(-1));
             },
             isNumber() {
-                let reg = /^[0-9]*[1-9][0-9]*$/;
+                let reg = /^[0-9][0-9]*$/;
                 return reg.test(String(this.current).split(/[×÷+-]/).slice(-1)[0]);
             }
         },
