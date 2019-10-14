@@ -8,7 +8,7 @@ export default new Router({
         {
             path: '',
             component: () => import(/* webpackChunkName: "home" */ '../components/common/computer.vue'),
-            meta: { title: '在线计算器' }
+            meta: { title: 'Online Computer' }
         }
         ]
 });

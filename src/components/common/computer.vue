@@ -47,7 +47,7 @@
 
 <script>
     export default {
-        name: '在线计算器',
+        name: 'Computer',
         data() {
             return {
                 current: '0',
@@ -58,17 +58,30 @@
         },
         methods: {
             input(event) {
-                if (event.target.innerText === '.') {
-                    if (String(this.current).indexOf('.') !== -1) {
+                this.inputting = true;
+                let inputChar = event.target.innerText;
+                if (inputChar === '.') {
+                    if (!this.isNumber()) {
+                        return;
+                    } else {
+                        this.current += inputChar;
+                        return;
+                    }
+                }
+                if (inputChar === '+' || inputChar === '-' || inputChar === '×' || inputChar === '÷') {
+                    if (!this.beforeIsNum()) {
+                        return;
+                    } else {
+                        this.current += inputChar;
                         return;
                     }
                 }
                 if (this.current === '0') {
-                    this.current = event.target.innerText;
+                    this.current = inputChar;
                 } else {
-                    this.current += event.target.innerText;
+                    this.current += inputChar;
                 }
-                this.inputting = true;
+
             },
             computeResult() {
                 this.result = 'Output:' + this.current;
@@ -80,9 +93,17 @@
             },
             del() {
                 this.current = String(this.current).slice(0, -1);
-                if(String(this.current).length===0){
+                if (String(this.current).length === 0) {
                     this.current = '0';
                 }
+            },
+            beforeIsNum() {
+                let reg = /[0-9]/;
+                return reg.test(String(this.current).slice(-1));
+            },
+            isNumber() {
+                let reg = /^[0-9]*[1-9][0-9]*$/;
+                return reg.test(String(this.current).split(/[×÷\+-]/).slice(-1)[0]);
             }
         },
         computed: {
@@ -100,34 +121,54 @@
                 let key = window.event.keyCode;
                 _this.inputting = true;
                 console.log(key);
-                if (key === 13) {
+                if (key === 13 || key === 187) {
                     _this.computeResult();
                 }
                 if (key === 8) {
                     _this.del();
                 }
                 if (key >= 48 && key <= 57) {
-                    _this.current += String(key - 48);
+                    if (_this.current === '0') {
+                        _this.current = String(key - 48);
+                    } else {
+                        _this.current += String(key - 48);
+                    }
                 }
                 if (key >= 96 && key <= 105) {
-                    _this.current += String(key - 96);
+                    if (_this.current === '0') {
+                        _this.current = String(key - 96);
+                    } else {
+                        _this.current += String(key - 96);
+                    }
                 }
                 if (key === 110) {
-                    if (String(_this.current).indexOf('.') !== -1) {
+                    if (!_this.isNumber()) {
                         return;
                     }
                     _this.current += '.';
                 }
                 if (key === 107) {
+                    if (!_this.beforeIsNum()) {
+                        return;
+                    }
                     _this.current += '+';
                 }
-                if (key === 109) {
+                if (key === 109 || key === 189) {
+                    if (!_this.beforeIsNum()) {
+                        return;
+                    }
                     _this.current += '-';
                 }
                 if (key === 106) {
+                    if (!_this.beforeIsNum()) {
+                        return;
+                    }
                     _this.current += '×';
                 }
                 if (key === 111) {
+                    if (!_this.beforeIsNum()) {
+                        return;
+                    }
                     _this.current += '÷';
                 }
             };
