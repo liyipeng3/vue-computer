@@ -179,10 +179,10 @@
 
                 var sum = 0;
                 i = 0;
-                var num1,num2;
+                var num1=0,num2=0;
                 var flag=true;      //true表示数字在小数点前，false在小数点后
                 var afterPoint=1;
-                while (i <= end.length) {
+                while (i < end.length) {
                     if(end[i]>='0' && end[i]<='9'){     //若该元素为数字，
                         if(flag){
                             sum = sum*10+(parseFloat(end[i]));
@@ -190,15 +190,14 @@
                             sum += parseFloat(end[i])*Math.pow(0.1,afterPoint);
                             afterPoint++;
                         }
-                        if(end[i+1]===' '){           //若下个元素为空格，则与前面的数字进行运算后入栈，否则存储该数字
+                        if(end[i+1]===' ' || i+1===end.length){           //若下个元素为空格，则与前面的数字进行运算后入栈，否则存储该数字
                             flag=true;
                             afterPoint=1;
                             numstack.push(parseFloat(sum));
                             //alert(numstack[numstack.length-1]+"进栈")
                             i+=2;
                             sum=0;
-                        }
-                        else
+                        } else
                             i++;
                     }else if(end[i]==='.'){
                         i++;
