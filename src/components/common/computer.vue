@@ -36,13 +36,13 @@
                     <el-button @click="input" plain style="width: 20%;font-weight: bold" type="info">÷</el-button>
                 </el-row>
                 <el-row>
-                    <el-button @click="input" style="width: 41%">0</el-button>
+                    <el-button @click="input" style="width: 43%">0</el-button>
                     <el-button @click="input" plain style="width: 20%" type="info">(</el-button>
                     <el-button @click="input" plain style="width: 20%" type="info">)</el-button>
 
                 </el-row>
                 <el-row>
-                    <el-button @click="input" style="width: 22%;font-weight: 900">.</el-button>
+                    <el-button @click="input" style="width: 26%;font-weight: 900">.</el-button>
                     <el-button @click="computeResult" style="width: 60%" type="success"><i style="font-size: 12px"
                                                                                            class="iconfont icon-dengyu"></i>
                     </el-button>
@@ -75,7 +75,7 @@
                         return;
                     }
                 }
-                if (inputChar === '+' || inputChar === '-' || inputChar === '×' || inputChar === '÷') {
+                if (inputChar === '+' || inputChar === '-' || inputChar === '×' || inputChar === '÷' || inputChar === ')') {
                     if (!this.beforeIsNum()) {
                         return;
                     } else {
@@ -83,29 +83,53 @@
                         return;
                     }
                 }
+                if (inputChar === '(') {
+                    let end = this.current[this.current.length - 1];
+                    if (this.current === '0') {
+                        this.current = inputChar + this.current;
+                    }
+                    if (end === '+' || end === '-' || end === '×' || end === '÷') {
+                        this.current += inputChar;
+                        return;
+                    } else {
+                        return;
+                    }
+                }
                 if (this.current === '0') {
                     this.current = inputChar;
+                } else if (this.current === '(0') {
+                    this.current = '(' + inputChar;
                 } else {
                     this.current += inputChar;
                 }
+
 
             },
             computeResult() {
                 /*-----------判断是否符合语法-----------*/
                 let i = 0, leftnum = 0;
-                for(i;i<=this.current.length;i++){
-                    if(this.current[i]==='(')
+                for (i; i <= this.current.length; i++) {
+                    if (this.current[i] === '(')
                         leftnum++;
-                    else if(this.current[i]===')'){
+                    else if (this.current[i] === ')') {
                         leftnum--;
-                        if(this.current[i-1]==='(')     //()内无数字
-                            return error
+                        if (this.current[i - 1] === '(')     //()内无数字
+                        {
+                            this.result = 'ERROR';
+                            return;
+                        }
+
                     }
-                    if(leftnum<0)       //左右括号数不同
-                        return error
+                    if (leftnum < 0)       //左右括号数不同
+                    {
+                        this.result = 'ERROR';
+                        return;
+                    }
                 }
-                if(leftnum!==0)
-                    return error
+                if (leftnum !== 0) {
+                    this.result = 'ERROR';
+                    return;
+                }
 
                 /*-----------中缀表达式转后缀表达式---------*/
                 let end = [];
@@ -271,14 +295,16 @@
             },
             beforeIsNum() {
                 let reg = /[0-9]/;
-                if(String(this.current).slice(-1)===')'){
+                if (String(this.current).slice(-1) === ')') {
                     return true;
                 }
+                console.log(String(this.current).slice(-1));
                 return reg.test(String(this.current).slice(-1));
             },
             isNumber() {
                 let reg = /^[0-9][0-9]*$/;
-                return reg.test(String(this.current).split(/[×÷+-]/).slice(-1)[0]);
+                console.log(String(this.current).split(/[×÷+-]/).slice(-1)[0]);
+                return reg.test(String(this.current).split(/[()×÷+-]/).slice(-1)[0]);
             }
         },
         watch: {
