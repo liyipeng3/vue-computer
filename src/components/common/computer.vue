@@ -2,7 +2,7 @@
     <div>
         <h1>在线计算器</h1>
         <el-container style="margin:0 auto">
-            <el-card style="width: 36%;margin: 0 auto">
+            <el-card id="container" style="margin: 0 auto">
                 <el-row style="margin: 0 auto">
                     <el-card shadow="never" style="width: 85%;margin: 0 auto;">
                         <p style="font-size: 30px" v-show="inputting">{{current}}</p>
@@ -10,9 +10,11 @@
                     </el-card>
                 </el-row>
                 <el-row>
-                    <el-button :disabled="isEmpty" @click="clear" style="width: 32%" type="primary"><i style="font-size: 12px" class="iconfont icon-guiling"></i></el-button>
+                    <el-button :disabled="isEmpty" @click="clear" style="width: 32%" type="primary"><i
+                            style="font-size: 12px" class="iconfont icon-guiling"></i></el-button>
                     <el-button :disabled="isEmpty" @click="del" style="width: 30%"
-                               type="danger"><i style="font-size: 12px" class="iconfont icon-backspace1"></i></el-button>
+                               type="danger"><i style="font-size: 12px" class="iconfont icon-backspace1"></i>
+                    </el-button>
                     <el-button @click="input" plain style="width: 20%;font-weight: 800" type="info">+</el-button>
                 </el-row>
                 <el-row>
@@ -34,9 +36,16 @@
                     <el-button @click="input" plain style="width: 20%;font-weight: bold" type="info">÷</el-button>
                 </el-row>
                 <el-row>
-                    <el-button @click="input" style="width: 40%">0</el-button>
-                    <el-button @click="input" style="width: 21.5%;font-weight: 900">.</el-button>
-                    <el-button @click="computeResult" style="width: 20%" type="success"><i style="font-size: 12px" class="iconfont icon-dengyu"></i></el-button>
+                    <el-button @click="input" style="width: 41%">0</el-button>
+                    <el-button @click="input" plain style="width: 20%" type="info">(</el-button>
+                    <el-button @click="input" plain style="width: 20%" type="info">)</el-button>
+
+                </el-row>
+                <el-row>
+                    <el-button @click="input" style="width: 22%;font-weight: 900">.</el-button>
+                    <el-button @click="computeResult" style="width: 60%" type="success"><i style="font-size: 12px"
+                                                                                           class="iconfont icon-dengyu"></i>
+                    </el-button>
                 </el-row>
             </el-card>
         </el-container>
@@ -83,9 +92,9 @@
             },
             computeResult() {
                 /*-----------中缀表达式转后缀表达式---------*/
-                var end = []
-                var i = 0, j = 0
-                var stack = [];
+                let end = [];
+                let i = 0, j = 0;
+                let stack = [];
                 while (i < this.current.length) {
                     if (this.current[i] <= '9' && this.current[i] >= '0') {
                         end[j] = this.current[i];
@@ -93,19 +102,19 @@
                         i++;
                         j++;
                         if ((this.current[i] > '9' || this.current[i] < '0' || i === this.current.length)
-                            && this.current[i]!=='.')   //若数字后一位为操作符（不为.）或为最后一个一个字符
+                            && this.current[i] !== '.')   //若数字后一位为操作符（不为.）或为最后一个一个字符
                         {
                             end[j] = ' ';
                             j++;
                         }
-                    } else if(this.current[i]==='.'){           //遇到'.'考察前后位是否有数字，有则添加到后缀表达式没有则报错
-                        if((end[j-1]<='9' && end[j-1]>='0') && (this.current[i+1]>='0' && this.current[i+1]<='9')){
-                            end[j]=this.current[i];
+                    } else if (this.current[i] === '.') {           //遇到'.'考察前后位是否有数字，有则添加到后缀表达式没有则报错
+                        if ((end[j - 1] <= '9' && end[j - 1] >= '0') && (this.current[i + 1] >= '0' && this.current[i + 1] <= '9')) {
+                            end[j] = this.current[i];
                             j++;
                             i++;
-                        }else{
-                            alert("error")
-                            return error
+                        } else {
+                            this.result = 'ERROR';
+                            return;
                         }
                     } else if (this.current[i] === '(')   //遇到'('则直接入栈
                     {
@@ -175,63 +184,59 @@
                 //alert(end)
 
                 /*---------计算后缀表达式的值------------*/
-                var numstack = [];
-
-                var sum = 0;
+                let numStack = [];
+                let sum = 0;
                 i = 0;
-                var num1=0,num2=0;
-                var flag=true;      //true表示数字在小数点前，false在小数点后
-                var afterPoint=1;
+                let num1 = 0, num2 = 0;
+                let flag = true;      //true表示数字在小数点前，false在小数点后
+                let afterPoint = 1;
                 while (i < end.length) {
-                    if(end[i]>='0' && end[i]<='9'){     //若该元素为数字，
-                        if(flag){
-                            sum = sum*10+(parseFloat(end[i]));
-                        }else{
-                            sum += parseFloat(end[i])*Math.pow(0.1,afterPoint);
+                    if (end[i] >= '0' && end[i] <= '9') {     //若该元素为数字，
+                        if (flag) {
+                            sum = sum * 10 + (parseFloat(end[i]));
+                        } else {
+                            sum += parseFloat(end[i]) * Math.pow(0.1, afterPoint);
                             afterPoint++;
                         }
-                        if(end[i+1]===' ' || i+1===end.length){           //若下个元素为空格，则与前面的数字进行运算后入栈，否则存储该数字
-                            flag=true;
-                            afterPoint=1;
-                            numstack.push(parseFloat(sum));
+                        if (end[i + 1] === ' ' || i + 1 === end.length) {           //若下个元素为空格，则与前面的数字进行运算后入栈，否则存储该数字
+                            flag = true;
+                            afterPoint = 1;
+                            numStack.push(parseFloat(sum));
                             //alert(numstack[numstack.length-1]+"进栈")
-                            i+=2;
-                            sum=0;
+                            i += 2;
+                            sum = 0;
                         } else
                             i++;
-                    }else if(end[i]==='.'){
+                    } else if (end[i] === '.') {
                         i++;
-                        flag=false;
-                    } else if(end[i]==='+') {
-                        num2=numstack.pop();
-                        num1=numstack.pop();
-                        numstack.push(num1+num2);
+                        flag = false;
+                    } else if (end[i] === '+') {
+                        num2 = numStack.pop();
+                        num1 = numStack.pop();
+                        numStack.push(num1 + num2);
                         //alert(num1+","+num2+"出栈计算，"+numstack[numstack.length-1]+"进栈")
-                        i+=2;
-                    }else if(end[i]==='-')
-                    {
-                        num2=numstack.pop();
-                        num1=numstack.pop();
-                        numstack.push(num1-num2);
+                        i += 2;
+                    } else if (end[i] === '-') {
+                        num2 = numStack.pop();
+                        num1 = numStack.pop();
+                        numStack.push(num1 - num2);
                         //alert(num1+","+num2+"出栈计算，"+numstack[numstack.length-1]+"进栈")
-                        i+=2;
-                    } else if(end[i]==='×') {
-                        num2=numstack.pop();
-                        num1=numstack.pop();
-                        numstack.push(num1*num2);
+                        i += 2;
+                    } else if (end[i] === '×') {
+                        num2 = numStack.pop();
+                        num1 = numStack.pop();
+                        numStack.push(num1 * num2);
                         //alert(num1+","+num2+"出栈计算，"+numstack[numstack.length-1]+"进栈")
-                        i+=2;
-                    }
-                    else if(end[i]==='÷')
-                    {
-                        num2=numstack.pop();
-                        num1=numstack.pop();
-                        numstack.push(num1/num2);
+                        i += 2;
+                    } else if (end[i] === '÷') {
+                        num2 = numStack.pop();
+                        num1 = numStack.pop();
+                        numStack.push(num1 / num2);
                         //alert(num1+","+num2+"出栈计算，"+numstack[numstack.length-1]+"进栈")
-                        i+=2;
+                        i += 2;
                     }
                 }
-                this.result = numstack.pop().toFixed(2);
+                this.result = numStack.pop().toFixed(2);
                 this.result = this.current + ' = ' + this.result;
                 this.inputting = false;
             },
@@ -249,18 +254,23 @@
             },
             beforeIsNum() {
                 let reg = /[0-9]/;
+                if(String(this.current).slice(-1)===')'){
+                    return true;
+                }
                 return reg.test(String(this.current).slice(-1));
             },
             isNumber() {
                 let reg = /^[0-9][0-9]*$/;
-                //console.log(reg.test(String(this.current).split(/[×÷+-]/).slice(-1)[0]));
                 return reg.test(String(this.current).split(/[×÷+-]/).slice(-1)[0]);
             }
         },
         watch: {
             current: {
-                handler: function(newVal) {
+                handler: function(newVal, oldVal) {
                     this.isEmpty = newVal === '0';
+                    if (this.current.length > 30) {
+                        this.current = oldVal;
+                    }
                 }
             }
         },
@@ -330,6 +340,16 @@
 
     .el-row {
         margin-top: 1em;
+    }
+
+    #container {
+        width: 36%
+    }
+
+    @media screen and (max-width: 1000px) {
+        #container {
+            width: 100%
+        }
     }
 
 </style>
