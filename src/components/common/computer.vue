@@ -91,9 +91,26 @@
 
             },
             computeResult() {
+                /*-----------判断是否符合语法-----------*/
+                let i = 0, leftnum = 0;
+                for(i;i<=this.current.length;i++){
+                    if(this.current[i]==='(')
+                        leftnum++;
+                    else if(this.current[i]===')'){
+                        leftnum--;
+                        if(this.current[i-1]==='(')     //()内无数字
+                            return error
+                    }
+                    if(leftnum<0)       //左右括号数不同
+                        return error
+                }
+                if(leftnum!==0)
+                    return error
+
                 /*-----------中缀表达式转后缀表达式---------*/
                 let end = [];
-                let i = 0, j = 0;
+                i = 0;
+                let j = 0;
                 let stack = [];
                 while (i < this.current.length) {
                     if (this.current[i] <= '9' && this.current[i] >= '0') {
