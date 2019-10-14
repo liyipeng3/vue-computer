@@ -2,45 +2,43 @@
     <div>
         <h1>在线计算器</h1>
         <el-container style="margin:0 auto">
-            <p v-show="false">{{delNum}}</p>
             <el-card style="width: 36%;margin: 0 auto">
                 <el-row style="margin: 0 auto">
-                    <el-card style="width: 85%;margin: 0 auto;" shadow="never">
-                        <p v-show="inputting" style="font-size: 30px">{{current}}</p>
-                        <p v-show="!inputting" style="font-size: 30px">{{result}}</p>
+                    <el-card shadow="never" style="width: 85%;margin: 0 auto;">
+                        <p style="font-size: 30px" v-show="inputting">{{current}}</p>
+                        <p style="font-size: 30px" v-show="!inputting">{{result}}</p>
                     </el-card>
                 </el-row>
                 <el-row>
-                    <el-button @click="clear" :disabled="isEmpty" type="primary" style="width: 32%"> C</el-button>
-                    <el-button @click="del" :disabled="isEmpty" type="danger" style="width: 30%"
-                               icon="el-icon-back"></el-button>
-                    <el-button @click="input" style="width: 20%" type="info" plain>+</el-button>
+                    <el-button :disabled="isEmpty" @click="clear" style="width: 32%" type="primary"><i style="font-size: 12px" class="iconfont icon-guiling"></i></el-button>
+                    <el-button :disabled="isEmpty" @click="del" style="width: 30%"
+                               type="danger"><i style="font-size: 12px" class="iconfont icon-backspace1"></i></el-button>
+                    <el-button @click="input" plain style="width: 20%;font-weight: 800" type="info">+</el-button>
                 </el-row>
                 <el-row>
                     <el-button @click="input" style="width: 20%">7</el-button>
                     <el-button @click="input" style="width: 20%">8</el-button>
                     <el-button @click="input" style="width: 20%">9</el-button>
-                    <el-button @click="input" style="width: 20%" type="info" plain>-</el-button>
+                    <el-button @click="input" plain style="width: 20%;font-weight: 800" type="info">-</el-button>
                 </el-row>
                 <el-row>
-                    <el-button @click="input" style="width: 20%"> 4</el-button>
-                    <el-button @click="input" style="width: 20%"> 5</el-button>
-                    <el-button @click="input" style="width: 20%"> 6</el-button>
-                    <el-button @click="input" style="width: 20%" type="info" plain>×</el-button>
+                    <el-button @click="input" style="width: 20%">4</el-button>
+                    <el-button @click="input" style="width: 20%">5</el-button>
+                    <el-button @click="input" style="width: 20%">6</el-button>
+                    <el-button @click="input" plain style="width: 20%;font-weight: 800" type="info">×</el-button>
                 </el-row>
                 <el-row>
-                    <el-button @click="input" style="width: 20%"> 1</el-button>
-                    <el-button @click="input" style="width: 20%"> 2</el-button>
-                    <el-button @click="input" style="width: 20%"> 3</el-button>
-                    <el-button @click="input" style="width: 20%" type="info" plain>÷</el-button>
+                    <el-button @click="input" style="width: 20%">1</el-button>
+                    <el-button @click="input" style="width: 20%">2</el-button>
+                    <el-button @click="input" style="width: 20%">3</el-button>
+                    <el-button @click="input" plain style="width: 20%;font-weight: bold" type="info">÷</el-button>
                 </el-row>
                 <el-row>
-                    <el-button @click="input" style="width: 40%"> 0</el-button>
-                    <el-button @click="input" style="width: 21.5%"> .</el-button>
-                    <el-button @click="computeResult" style="width: 20%" type="success">=</el-button>
+                    <el-button @click="input" style="width: 40%">0</el-button>
+                    <el-button @click="input" style="width: 21.5%;font-weight: 900">.</el-button>
+                    <el-button @click="computeResult" style="width: 20%" type="success"><i style="font-size: 12px" class="iconfont icon-dengyu"></i></el-button>
                 </el-row>
             </el-card>
-
         </el-container>
     </div>
 </template>
@@ -103,24 +101,22 @@
             },
             isNumber() {
                 let reg = /^[0-9]*[1-9][0-9]*$/;
-                return reg.test(String(this.current).split(/[×÷\+-]/).slice(-1)[0]);
+                return reg.test(String(this.current).split(/[×÷+-]/).slice(-1)[0]);
             }
         },
-        computed: {
-            delNum: function() {
-                if (this.current === '0') {
-                    this.isEmpty = true;
-                } else {
-                    this.isEmpty = false;
+        watch: {
+            current: {
+                handler: function(newVal) {
+                    this.isEmpty = newVal === '0';
                 }
             }
         },
         created() {
             const _this = this;
-            document.onkeydown = function(e) {
-                let key = window.event.keyCode;
+            document.onkeydown = function(event) {
+                let key = event.keyCode;
                 _this.inputting = true;
-                console.log(key);
+                //console.log(key);
                 if (key === 13 || key === 187) {
                     _this.computeResult();
                 }
@@ -172,7 +168,6 @@
                     _this.current += '÷';
                 }
             };
-
         }
     };
 </script>
