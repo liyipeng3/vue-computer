@@ -117,7 +117,7 @@
                         //alert("(出栈")
                         i++;
                     } else if (this.current[i] === '+' || this.current[i] === '-') {      //遇到加减时
-                        if (stack[stack.length - 1] === '*' || stack[stack.length - 1] === '/' || stack[stack.length - 1] === '+'
+                        if (stack[stack.length - 1] === '×' || stack[stack.length - 1] === '÷' || stack[stack.length - 1] === '+'
                             || stack[stack.length - 1] === '-')      //若栈顶元素为*，/，+，-，则栈顶元素出栈，新元素进栈
                         {
                             end[j] = stack.pop();
@@ -134,13 +134,13 @@
                             //alert(this.current[i]+"进栈")
                             i++;
                         }
-                    } else if (this.current[i] === '*' || this.current[i] === '/')   //遇到乘除时
+                    } else if (this.current[i] === '×' || this.current[i] === '÷')   //遇到乘除时
                     {
                         if (stack[stack.length - 1] === '+' || stack[stack.length - 1] === '-')  //若栈顶为+，-，则新元素进栈
                         {
                             stack.push(this.current[i]);
                             i++;
-                        } else if (stack[stack.length - 1] === '*' || stack[stack.length - 1] === '/')   //若栈顶为*，/则栈顶元素出栈到后缀表达式，新元素进栈
+                        } else if (stack[stack.length - 1] === '×' || stack[stack.length - 1] === '÷')   //若栈顶为*，/则栈顶元素出栈到后缀表达式，新元素进栈
                         {
                             end[j] = stack.pop();
                             j++;
@@ -194,14 +194,14 @@
                         numstack.push(num1-num2);
                         //alert(num1+","+num2+"出栈计算，"+numstack[numstack.length-1]+"进栈")
                         i+=2;
-                    } else if(end[i]==='*') {
+                    } else if(end[i]==='×') {
                         num2=numstack.pop();
                         num1=numstack.pop();
                         numstack.push(num1*num2);
                         //alert(num1+","+num2+"出栈计算，"+numstack[numstack.length-1]+"进栈")
                         i+=2;
                     }
-                    else if(end[i]==='/')
+                    else if(end[i]==='÷')
                     {
                         num2=numstack.pop();
                         num1=numstack.pop();
@@ -212,6 +212,7 @@
                 }
 
                 this.result = numstack.pop();
+                alert(this.result)
             },
             clear() {
                 this.result = '';
