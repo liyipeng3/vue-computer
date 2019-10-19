@@ -321,9 +321,10 @@
             document.onkeydown = function(event) {
                 let key = event.keyCode;
                 _this.inputting = true;
-                //console.log(key);
+                console.log(key);
                 if (key === 13 || key === 187) {
                     _this.computeResult();
+                    return;
                 }
                 if (key === 8) {
                     _this.del();
