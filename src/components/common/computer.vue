@@ -11,9 +11,9 @@
                 </el-row>
                 <el-row>
                     <el-button :disabled="isEmpty" @click="clear" style="width: 32%" type="primary"><i
-                            style="font-size: 12px" class="iconfont icon-guiling"></i></el-button>
+                            style="font-size: 12px" class="iconfont icon-guiling"/></el-button>
                     <el-button :disabled="isEmpty" @click="del" style="width: 30%"
-                               type="danger"><i style="font-size: 12px" class="iconfont icon-backspace1"></i>
+                               type="danger"><i style="font-size: 12px" class="iconfont icon-backspace1"/>
                     </el-button>
                     <el-button @click="input" plain style="width: 20%;font-weight: 800" type="info">+</el-button>
                 </el-row>
@@ -44,7 +44,7 @@
                 <el-row>
                     <el-button @click="input" style="width: 26%;font-weight: 900">.</el-button>
                     <el-button @click="computeResult" style="width: 60%" type="success"><i style="font-size: 12px"
-                                                                                           class="iconfont icon-dengyu"></i>
+                                                                                           class="iconfont icon-dengyu"/>
                     </el-button>
                 </el-row>
             </el-card>
@@ -222,7 +222,7 @@
                     j++;
                 }
                 end.pop();
-                //alert(end)
+                //alert(end)0
 
                 /*---------计算后缀表达式的值------------*/
                 let numStack = [];
